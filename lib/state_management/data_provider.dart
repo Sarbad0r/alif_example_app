@@ -12,6 +12,11 @@ class DataProvider extends ChangeNotifier implements DataAbs {
 
   List<Data> get dataList => _dataList;
 
+  void clearDataList() {
+    _dataList.clear();
+    notifyListeners();
+  }
+
   ///
   ///
 

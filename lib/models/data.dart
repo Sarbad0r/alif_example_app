@@ -18,13 +18,13 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-        url: json['url'],
-        startDate: json['startDate'],
-        endDate: json['endDate'],
-        name: json['name'],
-        icon: json['icon'],
-        objType: json['objType'],
-        loginRequired: json['loginRequired']);
+      url: json['url'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
+      name: json['name'],
+      icon: json['icon'],
+      objType: json['objType'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -35,7 +35,6 @@ class Data {
       "name": name,
       "icon": icon,
       "objType": objType,
-      "loginRequired": loginRequired == false ? 0 : 1
     };
   }
 }

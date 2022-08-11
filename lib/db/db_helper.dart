@@ -24,4 +24,14 @@ class DbHelper {
       await db.insert("data", each.toJson());
     }
   }
+
+  static Future<List<Data>> getAllDataFromDb() async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('data');
+    print(maps);
+    List<Data> dataList = List.generate(maps.length, (index) {
+      return Data.fromJson(maps[index]);
+    });
+    return dataList;
+  }
 }
