@@ -9,10 +9,13 @@ import 'package:http/http.dart' as http;
 
 class DataProvider extends ChangeNotifier implements DataAbs {
   final List<Data> _dataList = [];
-
+  int page = 1;
+  bool hasMore = true;
   List<Data> get dataList => _dataList;
 
   void clearDataList() {
+    page = 1;
+    hasMore = true;
     _dataList.clear();
     notifyListeners();
   }
@@ -22,22 +25,29 @@ class DataProvider extends ChangeNotifier implements DataAbs {
 
   @override
   Future<void> getAllData() async {
+    if (hasMore == false) return;
     List<Data> emptyList = [];
-    int maxLength = 3;
+    int maxLength = 15;
     try {
-      var res = await http
-          .get(Uri.parse("${ApiConnections.URL}/service/v2/upcomingGuides"));
+      var res = await http.get(Uri.parse(
+          "${ApiConnections.URL}/service/v2/upcomingGuides/?_page=$page"));
       if (res.statusCode == 200) {
-        Map<String, dynamic> json = jsonDecode(res.body);
-        List<dynamic> list = json['data'];
-
-        for (int i = 0; i < list.length; i++) {
-          emptyList.add(Data.fromJson(list[i]));
-          _dataList.add(Data.fromJson(list[i]));
+        Map<String, dynamic> map = jsonDecode(res.body);
+        List<dynamic> list = map['data'];
+        if (list.isNotEmpty) {
+          for (int i = 0; i < list.length; i++) {
+            _dataList.add(Data.fromJson(list[i]));
+          }
+          page++;
+          hasMore = true;
+          if (list.length < maxLength) {
+            hasMore = false;
+          }
+          notifyListeners();
+        } else {
+          hasMore = false;
+          notifyListeners();
         }
-        await DbHelper.saveDataToDb(emptyList);
-
-        notifyListeners();
       }
     } catch (e) {
       print(e);

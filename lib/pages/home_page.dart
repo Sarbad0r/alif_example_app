@@ -18,8 +18,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   ScrollController _scrollController = ScrollController();
 
-  // int scrollCount = 10;
-  // bool hasMore = true;
   bool internet = true;
 
   @override
@@ -37,17 +35,7 @@ class _HomePageState extends State<HomePage> {
         _scrollController.addListener(() {
           if (_scrollController.position.maxScrollExtent ==
               _scrollController.offset) {
-            // if (scrollCount < dataListProvider.dataList.length) {
-            //   setState(() {
-            //     if ((scrollCount + 3) > dataListProvider.dataList.length) {
-            //       scrollCount += dataListProvider.dataList.length - scrollCount;
-            //       hasMore = false;
-            //       return;
-            //     }
-            //     hasMore = true;
-            //     scrollCount += 3;
-            //   });
-            // }
+            dataListProvider.getAllData();
           }
         });
       } else {
@@ -117,72 +105,71 @@ class _HomePageState extends State<HomePage> {
                     ),
                     itemCount: dataListProvider.dataList.length,
                     itemBuilder: (context, index) {
-                      // if (index < dataListProvider.dataList.length) {
-                      return InkWell(
-                        onTap: () async {
-                          await launchUrlString(
-                              "${ApiConnections.URL}${dataListProvider.dataList[index].url}");
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              left: Dimensions.size20,
-                              right: Dimensions.size20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: Dimensions.size70,
-                                      height: Dimensions.size70,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  "${dataListProvider.dataList[index].icon}"))),
-                                    ),
-                                    SizedBox(
-                                      width: Dimensions.size10,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${dataListProvider.dataList[index].name}",
-                                            style: TextStyle(
-                                                fontSize: Dimensions.size18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "${dataListProvider.dataList[index].startDate}",
-                                            style: TextStyle(
-                                                fontSize: Dimensions.size14),
-                                          )
-                                        ],
+                      if (index < dataListProvider.dataList.length) {
+                        return InkWell(
+                          onTap: () async {
+                            await launchUrlString(
+                                "${ApiConnections.URL}${dataListProvider.dataList[index].url}");
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: Dimensions.size20,
+                                right: Dimensions.size20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: Dimensions.size70,
+                                        height: Dimensions.size70,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    "${dataListProvider.dataList[index].icon}"))),
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        width: Dimensions.size10,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${dataListProvider.dataList[index].name}",
+                                              style: TextStyle(
+                                                  fontSize: Dimensions.size18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              "${dataListProvider.dataList[index].startDate}",
+                                              style: TextStyle(
+                                                  fontSize: Dimensions.size14),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "${dataListProvider.dataList[index].endDate}",
-                                style: TextStyle(fontSize: Dimensions.size14),
-                              )
-                            ],
+                                Text(
+                                  "${dataListProvider.dataList[index].endDate}",
+                                  style: TextStyle(fontSize: Dimensions.size14),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                      // }
-                      // else {
-                      //   return hasMore == true
-                      //       ? const Center(
-                      //           child: CircularProgressIndicator(
-                      //           color: Colors.green,
-                      //         ))
-                      //       : Container();
-                      // }
+                        );
+                      } else {
+                        return dataListProvider.hasMore == true
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                color: Colors.green,
+                              ))
+                            : Container();
+                      }
                     },
                   ),
                 ),
