@@ -30,7 +30,7 @@ class DataProvider extends ChangeNotifier implements DataAbs {
     int maxLength = 15;
     try {
       var res = await http.get(Uri.parse(
-          "${ApiConnections.URL}/service/v2/upcomingGuides/?_page=$page"));
+          "${ApiConnections.URL}/service/v2/upcomingGuides/?page=$page"));
       if (res.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(res.body);
         List<dynamic> list = map['data'];

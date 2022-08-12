@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black,
                       ),
                     ),
-                    itemCount: dataListProvider.dataList.length,
+                    itemCount: dataListProvider.dataList.length + 1,
                     itemBuilder: (context, index) {
                       if (index < dataListProvider.dataList.length) {
                         return InkWell(
