@@ -11,6 +11,7 @@ class DataProvider extends ChangeNotifier implements DataAbs {
   final List<Data> _dataList = [];
   int page = 1;
   bool hasMore = true;
+
   List<Data> get dataList => _dataList;
 
   void clearDataList() {
@@ -37,12 +38,14 @@ class DataProvider extends ChangeNotifier implements DataAbs {
         if (list.isNotEmpty) {
           for (int i = 0; i < list.length; i++) {
             _dataList.add(Data.fromJson(list[i]));
+            emptyList.add(Data.fromJson(list[i]));
           }
           page++;
           hasMore = true;
           if (list.length < maxLength) {
             hasMore = false;
           }
+          await DbHelper.saveDataToDb(emptyList);
           notifyListeners();
         } else {
           hasMore = false;
